@@ -1,9 +1,25 @@
+
 import streamlit as st
+from datetime import date
+
+today = date.today()
 
 st.title("Lean Cut Costco Dashboard")
+st.caption(f"🗓️ Week of: {today.strftime('%B %d, %Y')}")
 
 st.metric("Calories", "1850")
 st.metric("Protein Goal", "180g")
+
+if "cart" not in st.session_state:
+    st.session_state.cart = []
+
+def update_cart(item_name, checked):
+    if checked:
+        if item_name not in st.session_state.cart:
+            st.session_state.cart.append(item_name)
+    else:
+        if item_name in st.session_state.cart:
+            st.session_state.cart.remove(item_name)
 
 protein = [
     {
@@ -57,7 +73,8 @@ fruits_veggies = [
     {"name": "Cinnamon", "image": "https://images.unsplash.com/photo-1636972955024-3b01f2236b01?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y2luYW1vbnxlbnwwfHwwfHx8MA%3D%3D"}
 ]
 
-col1, col2, col3 = st.columns(3)
+col1, col2, col3, col4 = st.columns([2,2,2,2])
+
 
 with col1:
     st.subheader("🥩 Protein")
@@ -65,6 +82,8 @@ with col1:
         st.write(item["name"])
         st.image(item["image"], width=150)
         st.checkbox("Add", key=f"protein_{i}")
+        checked = st.checkbox("Add", key=f"protein_{i}")
+        update_cart(item["name"], checked)
 
 with col2:
     st.subheader("🍚 Carbs")
@@ -72,6 +91,8 @@ with col2:
         st.write(item["name"])
         st.image(item["image"], width=150)
         st.checkbox("Add", key=f"carbs_{i}")
+        checked = st.checkbox("Add", key=f"carbs_{i}")
+        update_cart(item["name"], checked)
 
 with col3:
     st.subheader("🥦 Produce")
@@ -79,3 +100,19 @@ with col3:
         st.write(item["name"])
         st.image(item["image"], width=150)
         st.checkbox("Add", key=f"produce_{i}")
+        checked = st.checkbox("Add", key=f"produce_{i}")
+        update_cart(item["name"], checked)
+
+with col4:
+    st.subheader("🛒 Cart")
+
+    if st.session_state.cart:
+        for item in st.session_state.cart:
+            st.write("✔️", item)
+    else:
+        st.write("Cart is empty")
+
+        st.divider()
+
+        if st.button("Clear Cart"):
+            st.session_state.cart = []
