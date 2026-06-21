@@ -73,15 +73,14 @@ fruits_veggies = [
     {"name": "Cinnamon", "image": "https://images.unsplash.com/photo-1636972955024-3b01f2236b01?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y2luYW1vbnxlbnwwfHwwfHx8MA%3D%3D"}
 ]
 
-col1, col2, col3, col4 = st.columns([2,2,2,2])
-
+col1, col2, col3, col4 = st.columns([2, 2, 2, 2])
 
 with col1:
     st.subheader("🥩 Protein")
     for i, item in enumerate(protein):
         st.write(item["name"])
         st.image(item["image"], width=150)
-        st.checkbox("Add", key=f"protein_{i}")
+
         checked = st.checkbox("Add", key=f"protein_{i}")
         update_cart(item["name"], checked)
 
@@ -90,7 +89,7 @@ with col2:
     for i, item in enumerate(carbs):
         st.write(item["name"])
         st.image(item["image"], width=150)
-        st.checkbox("Add", key=f"carbs_{i}")
+
         checked = st.checkbox("Add", key=f"carbs_{i}")
         update_cart(item["name"], checked)
 
@@ -99,10 +98,11 @@ with col3:
     for i, item in enumerate(fruits_veggies):
         st.write(item["name"])
         st.image(item["image"], width=150)
-        st.checkbox("Add", key=f"produce_{i}")
+
         checked = st.checkbox("Add", key=f"produce_{i}")
         update_cart(item["name"], checked)
 
+# ---------------- CART ----------------
 with col4:
     st.subheader("🛒 Cart")
 
@@ -112,7 +112,8 @@ with col4:
     else:
         st.write("Cart is empty")
 
-        st.divider()
+    st.divider()
 
-        if st.button("Clear Cart"):
-            st.session_state.cart = []
+    if st.button("Clear Cart"):
+        st.session_state.cart = []
+        st.rerun()
